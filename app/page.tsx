@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ThemeToggle from "./ThemeToggle";
 
 const services = [
   ["Exodoncias", "Extracciones dentales seguras y sin dolor.", "M20 14c2 8 2 8 8 0 5 4 8 4 12 0 2 1 3 3 3s3-1 3-3c0-4 4-7 4-12 0-6-6-8-10-5"],
@@ -28,6 +29,11 @@ const otherServices = [
   ["Coronas de porcelana", "S/ 300"],
   ["Carillas de resina", "S/ 150.00"],
   ["Carillas de zirconio / disilicato", "S/ 700"],
+];
+
+const carouselCards = [
+  ...priceCards.map((card, index) => ({ ...card, icon: serviceIcons[index % serviceIcons.length] })),
+  { title: "Otros servicios", rows: otherServices, icon: "veneer" },
 ];
 
 const benefits = [
@@ -64,8 +70,8 @@ function AppLogo() {
   return (
     <svg className="app-logo-mark" viewBox="0 0 96 96" aria-hidden="true">
       <rect width="96" height="96" rx="22" />
-      <path d="M28 20c8-8 17-2 24-1 8 1 17-5 24 2 9 9 4 22 0 32-5 14-7 29-17 29-9 0-7-24-15-24S38 82 29 82c-10 0-13-15-18-29C7 42 3 30 12 21c6-7 11 4 16-1Z" />
-      <path d="M28 66 39 38l17 31 12-31" />
+      <path d="M31 19c10-10 20 0 28 0 10 0 18-6 26 2 10 12 2 28-4 44-4 12-6 24-14 24-10 0-6-26-19-26S40 89 30 89c-8 0-10-12-14-24-6-18-14-34-2-44 6-6 12-4 17-2Z" />
+      <path d="M27 66 37 38l16 36 14-38" />
     </svg>
   );
 }
@@ -146,9 +152,12 @@ export default function Home() {
               </a>
             ))}
           </div>
-          <a className="nav-cta" href={apkDownloadUrl} download>
+          <div className="nav-actions">
+            <ThemeToggle />
+            <a className="nav-cta" href={apkDownloadUrl} download>
             <span aria-hidden="true">▣</span> Agenda tu cita
-          </a>
+            </a>
+          </div>
         </nav>
       </header>
 
@@ -165,11 +174,6 @@ export default function Home() {
               En Dental Namay brindamos atención odontológica integral en Trujillo, La Libertad, con tratamientos seguros,
               personalizados y accesibles para toda la familia.
             </p>
-            <div className="hero-points">
-              <span>Atención profesional</span>
-              <span>Precios accesibles</span>
-              <span>Ubicados en Trujillo</span>
-            </div>
             <div className="hero-actions">
               <a className="btn primary" href={apkDownloadUrl} download>Reservar cita</a>
               <a className="btn secondary" href="#servicios">Ver servicios</a>
@@ -194,28 +198,30 @@ export default function Home() {
           <h2>Nuestros servicios <b>y precios</b></h2>
           <span />
         </div>
-        <div className="price-grid">
-          {priceCards.map((card) => (
-            <article className="price-card" key={card.title}>
-              <h3>{card.title} {card.subtitle && <small>{card.subtitle}</small>}</h3>
-              {card.rows.map(([name, price]) => (
-                <p key={name}><span>{name}</span><strong>{price}</strong></p>
-              ))}
-            </article>
-          ))}
-        </div>
-        <article className="price-card other-card">
-          <h3>Otros servicios</h3>
-          <div>
-            {otherServices.map(([name, price]) => (
-              <p key={name}><span>{name}</span><strong>{price}</strong></p>
+        <div className="price-carousel" aria-label="Servicios y precios">
+          <div className="price-track">
+            {[...carouselCards, ...carouselCards].map((card, index) => (
+              <article className="treatment-card" key={`${card.title}-${index}`}>
+                <div className="treatment-visual">
+                  <span className="treatment-orb" />
+                  <Icon name={card.icon} />
+                </div>
+                <div className="treatment-body">
+                  <h3>{card.title} {"subtitle" in card && card.subtitle && <small>{card.subtitle}</small>}</h3>
+                  <div className="treatment-prices">
+                    {card.rows.map(([name, price]) => (
+                      <p key={name}><span>{name}</span><strong>{price}</strong></p>
+                    ))}
+                  </div>
+                </div>
+              </article>
             ))}
           </div>
-        </article>
+        </div>
       </section>
 
       <section className="section why" id="nosotros">
-        <Image src="/images/dental-team.webp" alt="Equipo odontológico de Dental Namay" width={820} height={520} />
+        <Image src="/images/dental-team.jpeg" alt="Equipo odontológico de Dental Namay" width={820} height={520} />
         <div>
           <h2>¿Por qué elegir <b>Dental Namay?</b></h2>
           <div className="benefits">
@@ -240,14 +246,18 @@ export default function Home() {
             <h2>Estamos en <b>Trujillo, La Libertad</b></h2>
             <p>Brindamos servicios odontológicos para niños, jóvenes y adultos en un espacio cómodo, moderno y accesible.</p>
             <div className="info-box">
-              <p><strong>Ubicación:</strong> Trujillo, La Libertad</p>
+              <p><strong>Ubicación:</strong> Clínica Dental Namay</p>
               <p><strong>Especialidad:</strong> Odontología integral</p>
-              <p><strong>Horario referencial:</strong> Lun - Sáb / 9:00 AM - 7:00 PM</p>
+              <p><strong>Horario:</strong> Lun - Sáb / 2:00 PM - 9:00 PM</p>
             </div>
           </div>
-          <div className="map-card" aria-label="Mapa referencial de Dental Namay">
-            <span className="pin" />
-            <div className="map-label"><strong>Dental Namay</strong><small>Odontología Integral</small></div>
+          <div className="map-card" aria-label="Mapa de ubicación de Dental Namay">
+            <iframe
+              title="Ubicación de Dental Namay en Google Maps"
+              src="https://www.google.com/maps?q=-8.071592,-79.066477&z=17&output=embed"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
       </section>
@@ -288,15 +298,15 @@ export default function Home() {
               <div className="phone-status"><span>7:46</span><span>LTE</span></div>
               <div className="phone-greeting">
                 <strong>Hola, Liz</strong>
-                <small>Bienvenida a ClÃ­nica Namay</small>
+                <small>Bienvenida a Clinica Namay</small>
               </div>
               <div className="phone-hero">
-                <span>ClÃ­nica Dental</span>
+                <span>Clinica Dental</span>
                 <h3>Tu sonrisa es nuestra prioridad</h3>
                 <p>Cuida tu salud dental con profesionalismo.</p>
                 <button>Reservar cita</button>
               </div>
-              <div className="phone-title"><strong>Accesos rÃ¡pidos</strong><small>Ver todos</small></div>
+              <div className="phone-title"><strong>Accesos rapidos</strong><small>Ver todos</small></div>
               <div className="phone-shortcuts">
                 <span>Citas</span>
                 <span>Historial</span>
@@ -317,7 +327,7 @@ export default function Home() {
           </div>
           <div><h3>Enlaces rápidos</h3><a>Inicio</a><a>Nosotros</a><a>Servicios</a><a>Precios</a><a>Ubicación</a></div>
           <div><h3>Servicios</h3><a>Exodoncias</a><a>Restauraciones</a><a>Ortodoncia</a><a>Prótesis fijas</a><a>Carillas y coronas</a></div>
-          <div><h3>Contáctanos</h3><p>+51 963 622 602</p><p>info@dentalnamay.com</p><p>Lun - Sáb / 9:00 AM - 7:00 PM</p></div>
+          <div><h3>Contáctanos</h3><p>+51 963 622 602</p><p>info@dentalnamay.com</p><p>Lun - Sáb / 2:00 PM - 9:00 PM</p></div>
         </div>
         <p className="copyright">© 2024 Dental Namay - Odontología Integral. Todos los derechos reservados.</p>
       </footer>
