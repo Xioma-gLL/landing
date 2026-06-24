@@ -1,51 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dental Namay — Landing Page
 
-## Getting Started
+Landing page de **Dental Namay**, clínica de odontología integral en Trujillo, La Libertad.
+Construida con **Next.js 16** (App Router) y **Tailwind CSS 4**.
 
-First, run the development server:
+## Desarrollo local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+La página principal está en `app/page.tsx` y los estilos en `app/globals.css`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Deploy on Render
-
-This project includes a `render.yaml` Blueprint for Render.
-
-1. Push this folder to GitHub.
-2. In Render, create a new Blueprint or Web Service from the repository.
-3. If you create the service manually, use:
+## Build de producción
 
 ```bash
-Build Command: npm ci && npm run build
-Start Command: npm run start
+npm run build
+npm run start
 ```
 
-Render is configured to use Node `22` via `render.yaml`. The app supports Node `>=20.9.0`. Render provides the `PORT` environment variable automatically, and `next start` uses it in production.
+## Imágenes
+
+Todas las imágenes del sitio están optimizadas en formato **WebP** dentro de
+`public/images/` (excepto el favicon `logo.png`). Si agregas nuevas imágenes,
+conviértelas a WebP para mantener la carga rápida. Puedes usar `sharp`:
+
+```bash
+node -e "require('sharp')('public/images/mi-foto.jpg').resize({width:1200,withoutEnlargement:true}).webp({quality:80}).toFile('public/images/mi-foto.webp')"
+```
+
+## Desplegar en Vercel
+
+> **Importante:** la app vive en la subcarpeta `landing/`. Tienes dos opciones:
+
+### Opción A — Subir solo la carpeta `landing` (recomendado)
+
+1. Crea un repositorio en GitHub y sube **el contenido de `landing/`** como raíz.
+2. Entra a [vercel.com/new](https://vercel.com/new) e importa el repositorio.
+3. Vercel detecta Next.js automáticamente. Deja los valores por defecto:
+   - **Framework Preset:** Next.js
+   - **Build Command:** `next build`
+   - **Output:** automático
+4. Pulsa **Deploy**. ¡Listo!
+
+### Opción B — Subir toda la carpeta `LANDINGPAGE`
+
+1. Sube todo el proyecto a GitHub.
+2. Al importar en Vercel, en **Root Directory** selecciona `landing`.
+3. Pulsa **Deploy**.
+
+No se requieren variables de entorno para que el sitio funcione.
+
+### Despliegue por CLI (alternativa)
+
+```bash
+npm i -g vercel
+cd landing
+vercel
+```

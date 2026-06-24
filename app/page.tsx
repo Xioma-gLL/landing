@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
+import ScrollReveal from "./ScrollReveal";
 
 const services = [
   ["Exodoncias", "Extracciones dentales seguras y sin dolor.", "M20 14c2 8 2 8 8 0 5 4 8 4 12 0 2 1 3 3 3s3-1 3-3c0-4 4-7 4-12 0-6-6-8-10-5"],
@@ -11,7 +12,6 @@ const services = [
 ];
 
 const serviceIcons = ["extraction", "restoration", "braces", "fixed", "removable", "veneer"];
-const apkDownloadUrl = "/downloads/dental-namay.apk";
 const whatsappUrl = "https://wa.me/51963622602";
 
 const priceCards = [
@@ -48,6 +48,15 @@ const testimonials = [
   ["Me hice mi prótesis y quedé súper cómodo. El trato es amable y los precios son justos.", "Carlos Alberto G."],
   ["Llevé a mi hijo y tuvo una experiencia muy buena. Recomendados al 100%.", "Lucía Valentina P."],
 ];
+
+function initials(name: string) {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
 
 function Logo() {
   return (
@@ -154,7 +163,7 @@ export default function Home() {
           </div>
           <div className="nav-actions">
             <ThemeToggle />
-            <a className="nav-cta" href={apkDownloadUrl} download>
+            <a className="nav-cta" href="/dental-namay.apk" download="dental-namay.apk">
             <span aria-hidden="true">▣</span> Agenda tu cita
             </a>
           </div>
@@ -162,21 +171,46 @@ export default function Home() {
       </header>
 
       <section className="hero" id="inicio">
-        <Image className="hero-photo" src="/images/hero-dentist.webp" alt="Dentista sonriendo en una clínica moderna" fill priority />
         <div className="hero-overlay" />
-        <div className="hero-ring" aria-hidden="true" />
+        <div className="hero-blob hero-blob-1" aria-hidden="true" />
+        <div className="hero-blob hero-blob-2" aria-hidden="true" />
+        <div className="hero-grid-glow" aria-hidden="true" />
         <div className="section hero-content">
           <div className="hero-copy">
+            <span className="hero-badge">
+              <span className="hero-live" aria-hidden="true" />
+              Agenda abierta hoy · Lun a Sáb
+            </span>
             <h1>
-              Tu sonrisa en <span>las mejores manos</span>
+              Sonríe con <span>total confianza</span>
             </h1>
             <p>
-              En Dental Namay brindamos atención odontológica integral en Trujillo, La Libertad, con tratamientos seguros,
-              personalizados y accesibles para toda la familia.
+              Odontología integral en Trujillo con tratamientos seguros, sin dolor y a tu medida.
+              Tu primera valoración es <b>gratuita</b>.
             </p>
             <div className="hero-actions">
-              <a className="btn primary" href={apkDownloadUrl} download>Reservar cita</a>
+              <a className="btn primary" href={whatsappUrl} target="_blank" rel="noreferrer">
+                <span aria-hidden="true">💬</span> Reservar mi cita
+              </a>
               <a className="btn secondary" href="#servicios">Ver servicios</a>
+            </div>
+            <ul className="hero-trust">
+              <li><strong>+8</strong><span>Años de experiencia</span></li>
+              <li><strong>+3000</strong><span>Pacientes felices</span></li>
+              <li><strong>4.9★</strong><span>Valoración Google</span></li>
+            </ul>
+          </div>
+          <div className="hero-visual" aria-hidden="true">
+            <div className="hero-photo-frame">
+              <Image className="hero-photo" src="/images/hero-dentist.webp" alt="Dentista sonriendo en una clínica moderna" width={620} height={720} priority />
+              <div className="hero-chip hero-chip-rating">
+                <span className="hero-chip-stars">★★★★★</span>
+                <small>+3000 sonrisas</small>
+              </div>
+              <div className="hero-chip hero-chip-safe">
+                <span aria-hidden="true">🦷</span>
+                <small>Sin dolor<br />garantizado</small>
+              </div>
             </div>
           </div>
         </div>
@@ -184,15 +218,15 @@ export default function Home() {
 
       <section className="section service-strip" id="servicios">
         {services.map(([title, text], index) => (
-          <article className="service-card" key={title}>
-            <Icon name={serviceIcons[index]} />
+          <article className="service-card" key={title} data-reveal style={{ transitionDelay: `${index * 70}ms` }}>
+            <div className="service-icon-wrap"><Icon name={serviceIcons[index]} /></div>
             <h2>{title}</h2>
             <p>{text}</p>
           </article>
         ))}
       </section>
 
-      <section className="section prices" id="precios">
+      <section className="section prices" id="precios" data-reveal>
         <div className="section-title">
           <span />
           <h2>Nuestros servicios <b>y precios</b></h2>
@@ -221,12 +255,18 @@ export default function Home() {
       </section>
 
       <section className="section why" id="nosotros">
-        <Image src="/images/dental-team.jpeg" alt="Equipo odontológico de Dental Namay" width={820} height={520} />
-        <div>
+        <div className="why-media" data-reveal>
+          <Image src="/images/dental-team.webp" alt="Equipo odontológico de Dental Namay" width={820} height={520} />
+          <div className="why-badge" aria-hidden="true">
+            <strong>+8</strong>
+            <span>años cuidando<br />tu sonrisa</span>
+          </div>
+        </div>
+        <div data-reveal>
           <h2>¿Por qué elegir <b>Dental Namay?</b></h2>
           <div className="benefits">
             {benefits.map(([title, text], index) => (
-              <article key={title}>
+              <article key={title} data-reveal style={{ transitionDelay: `${index * 80}ms` }}>
                 <span className={index % 2 ? "red" : ""}>{["✚", "◒", "●", "◇"][index]}</span>
                 <h3>{title}</h3>
                 <p>{text}</p>
@@ -242,7 +282,7 @@ export default function Home() {
 
       <section className="location-band" id="ubicacion">
         <div className="section location">
-          <div className="location-info">
+          <div className="location-info" data-reveal>
             <h2>Estamos en <b>Trujillo, La Libertad</b></h2>
             <p>Brindamos servicios odontológicos para niños, jóvenes y adultos en un espacio cómodo, moderno y accesible.</p>
             <div className="info-box">
@@ -251,7 +291,7 @@ export default function Home() {
               <p><strong>Horario:</strong> Lun - Sáb / 2:00 PM - 9:00 PM</p>
             </div>
           </div>
-          <div className="map-card" aria-label="Mapa de ubicación de Dental Namay">
+          <div className="map-card" aria-label="Mapa de ubicación de Dental Namay" data-reveal>
             <iframe
               title="Ubicación de Dental Namay en Google Maps"
               src="https://www.google.com/maps?q=-8.071592,-79.066477&z=17&output=embed"
@@ -262,15 +302,21 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section testimonials">
+      <section className="section testimonials" data-reveal>
         <h2>Lo que dicen <b>nuestros pacientes</b></h2>
         <div className="testimonial-grid">
-          {testimonials.map(([quote, name]) => (
-            <article key={name}>
+          {testimonials.map(([quote, name], index) => (
+            <article key={name} data-reveal style={{ transitionDelay: `${index * 90}ms` }}>
+              <span className="quote-mark" aria-hidden="true">”</span>
               <p>“{quote}”</p>
               <div className="stars">★★★★★</div>
-              <strong>{name}</strong>
-              <small>Paciente</small>
+              <div className="testimonial-author">
+                <span className="avatar" aria-hidden="true">{initials(name)}</span>
+                <span>
+                  <strong>{name}</strong>
+                  <small>Paciente verificado</small>
+                </span>
+              </div>
             </article>
           ))}
         </div>
@@ -278,19 +324,19 @@ export default function Home() {
 
       <section className="app-promo" id="app">
         <div className="section app-promo-grid">
-          <div className="app-promo-copy">
+          <div className="app-promo-copy" data-reveal>
             <span className="app-kicker">Nueva app Dental Namay</span>
             <h2>Tu cuidado dental, citas y pagos en un solo lugar</h2>
             <p>
-              Reserva tus citas, revisa tu historial y mantente conectado con la clÃ­nica desde una experiencia moderna,
-              rÃ¡pida y pensada para pacientes.
+              Reserva tus citas, revisa tu historial y mantente conectado con la clínica desde una experiencia moderna,
+              rápida y pensada para pacientes.
             </p>
             <div className="app-promo-actions">
-              <a className="btn primary" href={apkDownloadUrl} download>Descargar APK</a>
+              <a className="btn primary" href={whatsappUrl} target="_blank" rel="noreferrer">Solicitar acceso</a>
               <a className="btn secondary" href={whatsappUrl} target="_blank" rel="noreferrer">Consultar por WhatsApp</a>
             </div>
           </div>
-          <div className="app-showcase" aria-label="Vista previa de la aplicaciÃ³n Dental Namay">
+          <div className="app-showcase" aria-label="Vista previa de la aplicación Dental Namay" data-reveal>
             <div className="app-splash">
               <AppLogo />
             </div>
@@ -298,15 +344,15 @@ export default function Home() {
               <div className="phone-status"><span>7:46</span><span>LTE</span></div>
               <div className="phone-greeting">
                 <strong>Hola, Liz</strong>
-                <small>Bienvenida a Clinica Namay</small>
+                <small>Bienvenida a Clínica Namay</small>
               </div>
               <div className="phone-hero">
-                <span>Clinica Dental</span>
+                <span>Clínica Dental</span>
                 <h3>Tu sonrisa es nuestra prioridad</h3>
                 <p>Cuida tu salud dental con profesionalismo.</p>
                 <button>Reservar cita</button>
               </div>
-              <div className="phone-title"><strong>Accesos rapidos</strong><small>Ver todos</small></div>
+              <div className="phone-title"><strong>Accesos rápidos</strong><small>Ver todos</small></div>
               <div className="phone-shortcuts">
                 <span>Citas</span>
                 <span>Historial</span>
@@ -329,8 +375,9 @@ export default function Home() {
           <div><h3>Servicios</h3><a>Exodoncias</a><a>Restauraciones</a><a>Ortodoncia</a><a>Prótesis fijas</a><a>Carillas y coronas</a></div>
           <div><h3>Contáctanos</h3><p>+51 963 622 602</p><p>info@dentalnamay.com</p><p>Lun - Sáb / 2:00 PM - 9:00 PM</p></div>
         </div>
-        <p className="copyright">© 2024 Dental Namay - Odontología Integral. Todos los derechos reservados.</p>
+        <p className="copyright">© 2026 Dental Namay - Odontología Integral. Todos los derechos reservados.</p>
       </footer>
+      <ScrollReveal />
       <a className="whatsapp-float" href={whatsappUrl} target="_blank" rel="noreferrer" aria-label="Escribir por WhatsApp">
         <svg viewBox="0 0 448 512" aria-hidden="true">
           <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32 101 32 1 132.1 1 255c0 39.3 10.2 77.7 29.6 111.5L0 480l116.1-30.5c32.4 17.7 68.9 27 106.9 27h.1c122.9 0 222.9-100.1 222.9-223 0-59.4-23.1-115.2-65.1-156.4ZM223 438.6c-33.9 0-67.1-9.1-96-26.2l-6.9-4.1-68.9 18.1 18.4-67.2-4.5-6.9C46.5 322.7 36.7 289 36.7 255 36.7 151.8 120.7 67.8 224 67.8c50.1 0 97.1 19.5 132.5 54.9 35.4 35.4 54.9 82.5 54.8 132.6 0 103.3-84 183.3-188.3 183.3Zm101.4-137.3c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.5-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.5-19.4 19-19.4 46.3s19.9 53.7 22.7 57.4c2.8 3.7 39.1 59.7 94.8 83.7 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.6-6.5Z" />
